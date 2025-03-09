@@ -1,0 +1,61 @@
+###########################################################################
+                                 HARDENING
+###########################################################################
+
+df -h
+cd /
+du -hsc *
+cd
+ip r l
+ping www.google.com
+cat /etc/redhat-release 
+yum install vim net-tools wget sysstat stat device-mapper-multipath* vsftpd lftp psmisc utils.pm yum-utils
+dmidecode -t 1
+wget http://172.29.0.123/download/Centos7_configure.sh
+ll -lrth
+chmod +x Centos7_configure.sh 
+ll -lrth
+./Centos7_configure.sh 
+yum update -y
+service NetworkManager status
+service NetworkManager stop
+service NetworkManager status
+ifconfig 
+ip r l
+init 6
+
+
+###########################################################################
+                                 BONDING
+###########################################################################
+
+
+ifconfig 
+ethtool enp3s0f0
+ethtool enp3s0f1
+ethtool ens1f0
+ethtool ens1f1
+ethtool ens1f2
+ethtool ens1f3
+ethtool enp3s0f0
+ethtool enp3s0f1
+ll -lrth
+ifconfig 
+ethtool enp3s0f0
+ethtool enp3s0f1
+ll -lrth
+./Centos7_configure.sh 
+service network status
+service network restart
+ifconfig 
+cat /proc/net/bonding/bond0
+ip r l
+ifdown enp3s0f0
+cat /proc/net/bonding/bond0
+ifup enp3s0f0
+cat /proc/net/bonding/bond0
+ifdown enp3s0f1
+cat /proc/net/bonding/bond0
+ifup enp3s0f1
+cat /proc/net/bonding/bond0
+history

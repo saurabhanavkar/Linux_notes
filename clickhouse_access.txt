@@ -1,0 +1,20 @@
+
+
+################################## CLICKHOUSE #########################################
+
+
+create user if not exists Omkars on cluster 'cluster-searches' HOST IP '172.29.87.131','172.29.182.122' IDENTIFIED with  plaintext_password by  'Omk@rs123';
+
+
+grant ALL on test.* TO Omkars on cluster 'cluster-searches' with grant option;
+
+
+grant SELECT on *.* TO yashd on cluster 'cluster-searches' with grant option;
+
+
+CREATE USER IF NOT EXISTS peter IDENTIFIED with plaintext_password by 'peter@123' HOST IP '172.29.87.165','172.29.183.239';
+
+grant ALL on *.* TO peter;
+
+
+GRANT SHOW, SELECT, ALTER, CREATE, DROP, TRUNCATE ON *.* TO saketp WITH GRANT OPTION

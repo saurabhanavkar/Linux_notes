@@ -1,0 +1,61 @@
+1) View package
+sudo rpm -qa | grep -i multipath
+
+device-mapper-multipath-0.4.9-136.el7_9.x86_64
+device-mapper-multipath-libs-0.4.9-136.el7_9.x86_64
+
+2) Check multipath config file in /etc 
+ll -lrth | grep -i multi
+
+-rw-r--r--.   1 root root 3.5K Mar  9 10:08 multipath.conf
+drwxr-xr-x.   2 root root 4.0K Mar  9 10:08 multipath
+
+3) sudo service multipathd status
+
+4) if its dead , start it
+sudo service multipathd start
+
+5) Check multipath using 
+multipath -ll 
+
+
+6) if it's not showing anything run below script 
+scp it from any multipath configured server
+rescan-scsi-bus.sh
+
+And then run the script
+
+Scanning host 14 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+ Scanning for device 14 0 0 31 ... 
+OLD: Host: scsi14 Channel: 00 Id: 00 Lun: 31
+      Vendor: DELL     Model: Universal Xport  Rev: 0780
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+ Scanning for device 14 0 0 0 ... 
+NEW: Host: scsi14 Channel: 00 Id: 00 Lun: 00
+      Vendor: DELL     Model: MD32xxi          Rev: 0780
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+ Scanning for device 14 0 0 1 ... 
+NEW: Host: scsi14 Channel: 00 Id: 00 Lun: 01
+      Vendor: DELL     Model: MD32xxi          Rev: 0780
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+6 new or changed device(s) found.          
+	[0:0:0:0]
+	[0:0:1:0]
+	[13:0:0:0]
+	[13:0:0:1]
+	[14:0:0:0]
+	[14:0:0:1]
+0 remapped or resized device(s) found.		
+0 device(s) removed.                 
+
+7) multipath -ll
+mpathe (3690b11c0000c1bff0000b50867a77277) dm-4 DELL    ,MD32xxi         
+size=1.0T features='3 queue_if_no_path pg_init_retries 50' hwhandler='1 rdac' wp=rw
+`-+- policy='service-time 0' prio=6 status=active
+  `- 14:0:0:0 sdh 8:112 active ready running
+mpathd (36782bcb0004032aa0000afb867a8a992) dm-3 DELL    ,MD32xxi         
+size=1.1T features='3 queue_if_no_path pg_init_retries 50' hwhandler='1 rdac' wp=rw
+|-+- policy='service-time 0' prio=6 status=active
+| `- 14:0:0:1 sdi 8:128 active ready running
+`-+- policy='service-time 0' prio=1 status=enabled
+  `- 13:0:0:1 sdg 8:96  active ghost running

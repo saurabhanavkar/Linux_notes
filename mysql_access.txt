@@ -1,0 +1,31 @@
+
+
+select user,host from mysql.user where user like '%linux_monitor%';
+
+ select user,host from mysql.user where host like '%172.29.87.158%';
+
+ CREATE USER sanjayk@172.29.137.179 IDENTIFIED BY 's@nj@y@987';
+
+ GRANT ALL PRIVILEGES ON dbteam_temp.* TO 'sanjayk'@'172.29.137.179';
+
+ GRANT SELECT ON *.* TO 'nikhilgirijan'@'172.29.87.126';
+
+ show grants for nikhilgirijan@172.29.87.126;
+
+ GRANT FILE ON *.* TO 'ashwins'@'172.29.87.197';
+
+ flush privileges; Revoke SELECT ON *.* from subhs@10.10.39.219;
+
+ select user,host,authentication_string from mysql.user where user like '%aruns%'; show slave hosts; GRANT SELECT ON *.* TO 'sunitha'@'172.29.180.10'; for i in {0..9}; do indexer -c /etc/sphinx/webport_sphinx-2.2.11-main.conf company_lineage_all_idx_$i --rotate >> /tmp/company_lineage_all_idx.log 2>&1;done# DROP USER 'niteshn'@'10.10.35.196';#select user,host,authentication_string from mysql.user where user like '%sanjayk%';#ALTER USER 'srinivasgajangi'@'172.29.5.64' IDENTIFIED BY 'srinivas@#12';
+
+ ALTER USER 'tarunh'@'172.29.180.63' IDENTIFIED BY 't@run_987';
+
+#UPDATE mysql.user SET Password=PASSWORD('foobar') WHERE USER='tom' AND Host='localhost';
+
+SET PASSWORD FOR 'local_user'@'localhost' = PASSWORD('new_password'); update mysql.user set authentication_string='*D2FF2FD9B536838B0074A3B7222D57ABAF8F6004' WHERE user='ajayjp' and host='10.10.55.120';
+
+update mysql.user set password='*2E380A01B633A871ACB520852B5777731DDD0A9C' WHERE user='web_app' and host='192.168.12.40';
+
+
+
+

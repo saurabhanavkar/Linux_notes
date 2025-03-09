@@ -1,0 +1,192 @@
+# Configuring Nagios Server
+
+## 1. Install Nagios and Dependencies
+```bash
+yum install nagios
+```
+
+## 2. Install Apache and Start Services
+```bash
+yum install httpd
+systemctl start httpd
+systemctl enable httpd
+```
+
+## 3. Create User for Nagios
+```bash
+sudo htpasswd -c /etc/nagios/passwd username
+```
+
+## 4. Access Nagios Web Interface
+```
+http://xx.xx.xx.xx/nagios
+```
+
+## 5. Modify Nagios Configuration
+Edit the Nagios configuration file:
+```bash
+vim /etc/nagios/nagios.cfg
+```
+Comment out the following lines:
+```bash
+#cfg_file=/etc/nagios/objects/commands.cfg
+#cfg_file=/etc/nagios/objects/contacts.cfg
+#cfg_file=/etc/nagios/objects/timeperiods.cfg
+#cfg_file=/etc/nagios/objects/templates.cfg
+#cfg_file=/etc/nagios/objects/localhost.cfg
+#cfg_file=/etc/nagios/objects/windows.cfg
+#cfg_file=/etc/nagios/objects/switch.cfg
+#cfg_file=/etc/nagios/objects/printer.cfg
+```
+Add the following entry:
+```bash
+cfg_dir=/etc/nagios/objects/
+```
+
+## 6. Install xinetd
+```bash
+yum install xinetd
+```
+Edit `/etc/xinet.d/nrpe` (Refer to an existing Nagios server)
+```bash
+vim /etc/xinet.d/nrpe
+```
+Restart xinetd:
+```bash
+systemctl restart xinetd
+```
+
+## 7. Install GCC
+```bash
+yum install gcc*
+```
+
+## 8. Install check_mk Live Status Package
+Download the latest version from:
+```
+http://mathias-kettner.de/check_mk_download.html
+```
+```bash
+wget <latest_tarball>
+./configure
+make
+make install
+```
+
+## 9. Enable Livestatus in Nagios
+Edit `nagios.cfg`:
+```bash
+vim /etc/nagios/nagios.cfg
+```
+Ensure the broker module is enabled:
+```bash
+broker_module=/usr/local/lib/mk-livestatus/livestatus.o /var/spool/nagios/cmd/live
+```
+Restart Nagios:
+```bash
+systemctl restart nagios
+```
+Verify `/var/spool/nagios/cmd/live` is created.
+
+## 10. Configure Livestatus
+Edit Livestatus configuration:
+```bash
+vim /etc/xinetd.d/livestatus
+```
+Add the Nagios server IP:
+```bash
+only_from = xx.xx.xx.xx
+```
+Compare with an existing Nagios server for necessary changes.
+
+## 11. Modify Commands Configuration
+Edit `commands.cfg`:
+```bash
+vim /etc/nagios/objects/commands.cfg
+```
+Comment out performance data processing commands:
+```bash
+# ‘process-host-perfdata’ command definition
+#define command{
+# command_name process-host-perfdata
+# command_line /usr/bin/printf "\%b" ...
+#}
+
+# ‘process-service-perfdata’ command definition
+#define command{
+# command_name process-service-perfdata
+# command_line /usr/bin/printf "\%b" ...
+#}
+```
+Add the following lines:
+```bash
+define command {
+    command_name process-service-perfdata
+    command_line /usr/bin/perl /usr/libexec/pnp4nagios/process_perfdata.pl
+}
+
+define command {
+    command_name process-host-perfdata
+    command_line /usr/bin/perl /usr/libexec/pnp4nagios/process_perfdata.pl -d HOSTPERFDATA
+}
+```
+
+## 12. Update nagios.cfg
+Edit `nagios.cfg`:
+```bash
+vim /etc/nagios/nagios.cfg
+```
+Comment out:
+```bash
+#host_perfdata_command=process-host-perfdata
+#service_perfdata_command=process-service-perfdata
+```
+Add the following lines:
+```bash
+host_perfdata_file=/tmp/host-perfdata
+service_perfdata_file=/tmp/service-perfdata
+```
+
+## 13. Perform Flight Check and Restart Nagios
+```bash
+nagios -v /etc/nagios/nagios.cfg
+systemctl restart nagios
+```
+
+## 14. Add Nagios Server in check_mk
+Edit `sites.mk`:
+```bash
+sudo vim /etc/check_mk/multisite.d/sites.mk
+```
+Add an entry:
+```python
+"amazon_Servers" : {
+    "alias" : "amazon_Servers",
+    "socket": "tcp:10.0.0.123:6557",
+    "url_prefix": "/nagios/",
+},
+```
+
+## 15. Enable SMS Integration
+Edit `commands.cfg`:
+```bash
+vim /etc/nagios/objects/commands.cfg
+```
+Add SMS notification commands:
+```bash
+define command{
+    command_name service_notify_with_smsgrp_manager
+    command_line sudo sh /scripts/standard_sms_sending_script.sh -f /etc/nagios/smsgrp_files/smsgrp_manager -m '$NOTIFICATIONTYPE$: Service $SERVICEDESC$ on $HOSTNAME$ is $SERVICEOUTPUT$ Date:$LONGDATETIME$'
+}
+
+define command{
+    command_name host_notify_with_smsgrp_manager
+    command_line sudo sh /scripts/standard_sms_sending_script.sh -f /etc/nagios/smsgrp_files/smsgrp_manager -m '$NOTIFICATIONTYPE$: Host: $HOSTNAME$ is $HOSTSTATE$ Date:$LONGDATETIME$'
+}
+```
+
+## Final Step: Restart Nagios
+```bash
+systemctl restart nagios
+```
+

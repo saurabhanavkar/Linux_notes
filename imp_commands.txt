@@ -1,0 +1,30 @@
+########################## Cluster_Deatils######################################################################
+
+for i in cat ip_list_cluster.txt; do echo $i; curl -s http://192.168.14.101:3000/getServerClusterDetails?server_ip=${i} | jq -r '.results.data[0].cluster_details'; done
+
+############################### Kill ###########################################################################
+
+ps auxxxxx | grep 'index_omni_products_cronjob' | awk '{print $2}' | xargs kill -9
+
+###################################### MailQ####################################################################
+
+@ Admin  team run this command  postsuper -d ALL on  192.168.23.187 once you see this alert - mail.jdomni.in
+
+################################### tar ########################################################################
+
+sudo tar -cvzf nagios_ahm.tar.gz nagios
+sudo tar -cvzf web_backup_ahm.tar.gz web_backup
+
+################################### 4xx & 5xx ##################################################################
+
+response >= 500 and response <= 504
+response >= 500 and response <= 504 AND request = /web_services/CategorySearch_universal.php?
+response:[500 TO 504]  AND request_header_agent: ("AdsBot-Google" OR "Googlebot" OR "GoogleOther")
+
+################################### loop_table #################################################################
+
+for i in cat table_txt;do echo ${i};sudo mysqldump search_input ${i} | gzip -fv > ${i}.sql.gz;done
+
+for i in `cat tables.txt` ; do echo ${i} ; sudo gunzip -fv ${i}.sql.gz ; sudo mysql  dbteam_temp < ${i}.sql ; sudo gzip -fv ${i}.sql ; done
+
+################################################################################################################

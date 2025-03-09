@@ -1,0 +1,78 @@
+http://192.168.13.102:999/sphinx.php(page to monitor request count befor activity)
+LINE="###############################################################################################################";sudo cat /proc/sys/kernel/hostname > /root/details_date +%d%b%Y ; sudo echo $LINE >> /root/details_date +%d%b%Y ; sudo /sbin/ifconfig -a >> /root/details_date +%d%b%Y ; sudo echo $LINE >> /root/details_date +%d%b%Y;sudo cat /proc/net/bonding/bond0 >> /root/details_date +%d%b%Y;sudo echo $LINE >> /root/details_date +%d%b%Y ;sudo  dmidecode -t system >> /root/details_date +%d%b%Y ; sudo echo $LINE >> /root/details_date +%d%b%Y ; sudo df -h >> /root/details_date +%d%b%Y ; sudo echo $LINE >> /root/details_date +%d%b%Y ; sudo free -g >> /root/details_date +%d%b%Y ;sudo  echo $LINE >> /root/details_date +%d%b%Y ;sudo  netstat -ntlp >> /root/details_date +%d%b%Y ;sudo  echo $LINE >> /root/details_date +%d%b%Y ; DOCK_CONT=sudo docker ps -q; for i in $DOCK_CONT; do echo "docker ports : " >> /root/details_date +%d%b%Y; sudo docker port $i >> /root/details_date +%d%b%Y; done; sudo  echo $LINE >> /root/details_date +%d%b%Y ; screen -ls >> /root/details_date +%d%b%Y ; sudo echo $LINE >> /root/details_date +%d%b%Y ; sudo multipath -ll >> /root/details_date +%d%b%Y ;sudo echo $LINE >> /root/details_date +%d%b%Y ;cat /sys/class/fc_host/*/port_name >> /root/details_date +%d%b%Y;  sudo echo $LINE >> /root/details_date +%d%b%Y ;sudo cat /etc/fstab >> /root/details_date +%d%b%Y ;sudo  echo $LINE >> /root/details_date +%d%b%Y ; sudo mysqld_multi report >> /root/details_date +%d%b%Y ;sudo  echo $LINE >> /root/details_date +%d%b%Y ; sudo ps auxf >> /root/details_date +%d%b%Y ;sudo  echo $LINE >> /root/details_date +%d%b%Y ;sudo mount >> /root/details_date +%d%b%Y ; echo "history from root before activity" >> /root/details_history_date +%d%b%Y; sudo echo $LINE >> /root/details_history_date +%d%b%Y; history >> /root/details_history_date +%d%b%Y;
+
+sudo ps -aux | grep -i filebeat
+rpm -qa | grep -i kernel
+cd /opt/
+ll -lrth
+sudo mv spx_status.sh spx_status.sh_OOP
+ll -lrth
+http://192.168.13.102:999/sphinx.php(page to monitor request count after OOP count should be 0)
+sudo netstat -ntpl
+
+curl http://192.168.28.72:9200/_cluster/health?pretty
+
+curl -s -X GET '192.168.28.72:9200/_all/_settings?pretty' | tee /home/saiprasad/settings$(date +%y%m%d%H%M%S).json
+curl -s -X GET '192.168.28.72:9200/_all/_settings?pretty' | tee /home/saiprasad/settings$(date +%y%m%d%H%M%S).json | grep delay
+curl -s -X GET '192.168.28.72:9200/_all/_settings?pretty' | grep delay
+
+curl -s -X GET '192.168.28.72:9200/_all/_settings?pretty' | grep delay
+
+
+ll -lrth
+curl -X PUT "192.168.28.71:9200/_all/_settings?pretty" -H 'Content-Type: application/json' -d' { "settings":
+{ "index.unassigned.node_left.delayed_timeout": "1200m" } }'
+
+curl -X PUT "192.168.12.227:9200/_all/_settings?pretty" -H 'Content-Type: application/json' -d' { "settings":
+{ "index.unassigned.node_left.delayed_timeout": "1200m" } }'
+
+echo "kernel details before upgrading;"; ip r l && date && sudo uname -r && sudo rpm -qa | grep kernel && sudo dmidecode -t1
+
+/etc/init.d/webport_searchd-2.2.11 status
+/etc/init.d/webport_searchd-2.2.11 stop
+sudo service elasticsearch status
+sudo service elasticsearch stop
+sudo service xinetd stop
+sudo service crond stop
+sudo service filebeat-8.8 status
+sudo service filebeat-8.8 stop
+
+sudo ps -aux | grep -i filebeat
+
+sudo service filebeat-es-8.6 status && sudo service filebeat-8.6 status && sudo service xinetd status && sudo service crond status && sudo service filebeat-8.8 status && sudo /etc/init.d/webport_searchd-2.2.11 status
+
+sudo service xinetd status && sudo service crond status && sudo service filebeat-8.8 status && sudo /etc/init.d/webport_searchd-2.2.11 status
+
+
+
+sudo /etc/init.d/jdmart_searchd status
+
+sudo service filebeat-es-8.6 stop && sudo service filebeat-8.6 stop && sudo service xinetd stop && sudo service crond stop && sudo service filebeat-8.8 stop && sudo /etc/init.d/webport_searchd-2.2.11 stop 
+
+sudo service xinetd stop && sudo service crond stop && sudo service filebeat-8.8 stop && sudo /etc/init.d/webport_searchd-2.2.11 stop
+ 
+ 
+sudo yum update kernel*
+sudo reboot
+
+echo "kernel details after upgrading;"; ip r l && date && sudo uname -r && sudo rpm -qa | grep kernel && sudo dmidecode -t1
+/etc/init.d/webport_searchd-2.2.11 status
+/etc/init.d/webport_searchd-2.2.11 start
+sudo service elasticsearch status
+sudo service elasticsearch start
+sudo service xinetd start
+sudo service crond start
+sudo service filebeat-8.8 status
+sudo service filebeat-8.8 start
+
+curl -s -X GET '192.168.12.227:9200/_all/_settings?pretty' | grep delay
+
+ To PUT delay for 10min
+
+curl -X PUT "192.168.13.32:9200/_all/_settings?pretty" -H 'Content-Type: application/json' -d' { "settings":
+{ "index.unassigned.node_left.delayed_timeout": "10m" }
+}'
+cd /opt/
+ll -lrth
+sudo mv spx_status.sh_OOP spx_status.sh
+http://192.168.13.102:999/sphinx.php(page to monitor request count after back in prod)

@@ -1,0 +1,30 @@
+server IP : 24.141
+
+cd /var/log/airflow
+
+tail -n 8000 campaign_leads_section.log > /home/pankaj/campaign_leads_section.txt
+
+cat campaign_joinfree.log | awk '/2023-08-30 19:54:26/,/2023-09-04 12:16:01/' > /home/urvesh/campaign_joinfree.txt
+
+cat campaign_joinfree.txt | grep "2023-08-31"
+
+
+cat campaign_jd_mart_hot_data.log | tail -n 2000000  | grep -i "update_date" > /tmp/campaign_jd_mart_hot_data_nov11.log
+
+
+
+
+su noderun
+
+docker ps
+
+docker inspect jdleads-api 
+
+cd /var/log/jdleads-api/pm2-logs
+
+zcat jdleads.pm2.access-0.log-2024-01-07.gz | tail -n 16000000 | head -n 1600000 > jdleads.pm2.access-0.log-2024-01-05.txt 
+
+
+
+
+zcat jdleads.pm2.access-0.log-2024-01-07.gz | tail -n 100 | grep -i update

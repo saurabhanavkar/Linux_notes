@@ -1,0 +1,39 @@
+@team kindly follow onward 
+POA Kernel activity 
+
+Before downtime of MySQL server
+
+check server is exist on LB module or not . if yes should not take 2 servers at a time for activity
+1. Take server confi details 
+
+
+LINE="###############################################################################################################";sudo cat /proc/sys/kernel/hostname > /root/details_`date +%d%b%Y` ; sudo echo $LINE >> /root/details_`date +%d%b%Y` ; sudo /sbin/ifconfig -a >> /root/details_`date +%d%b%Y` ; sudo echo $LINE >> /root/details_`date +%d%b%Y`;sudo cat /proc/net/bonding/bond0 >> /root/details_`date +%d%b%Y`;sudo echo $LINE >> /root/details_`date +%d%b%Y` ;sudo  dmidecode -t system >> /root/details_`date +%d%b%Y` ; sudo echo $LINE >> /root/details_`date +%d%b%Y` ; sudo df -h >> /root/details_`date +%d%b%Y` ; sudo echo $LINE >> /root/details_`date +%d%b%Y` ; sudo free -g >> /root/details_`date +%d%b%Y` ;sudo  echo $LINE >> /root/details_`date +%d%b%Y` ;sudo  netstat -ntlp >> /root/details_`date +%d%b%Y` ;sudo  echo $LINE >> /root/details_`date +%d%b%Y` ; DOCK_CONT=`sudo docker ps -q`; for i in $DOCK_CONT; do echo "docker ports : " >> /root/details_`date +%d%b%Y`; sudo docker port $i >> /root/details_`date +%d%b%Y`; done; sudo  echo $LINE >> /root/details_`date +%d%b%Y` ; screen -ls >> /root/details_`date +%d%b%Y` ; sudo echo $LINE >> /root/details_`date +%d%b%Y` ; sudo multipath -ll >> /root/details_`date +%d%b%Y` ;sudo echo $LINE >> /root/details_`date +%d%b%Y` ;cat /sys/class/fc_host/*/port_name >> /root/details_`date +%d%b%Y`;  sudo echo $LINE >> /root/details_`date +%d%b%Y` ;sudo cat /etc/fstab >> /root/details_`date +%d%b%Y` ;sudo  echo $LINE >> /root/details_`date +%d%b%Y` ; sudo mysqld_multi report >> /root/details_`date +%d%b%Y` ;sudo  echo $LINE >> /root/details_`date +%d%b%Y` ; sudo ps auxf >> /root/details_`date +%d%b%Y` ;sudo  echo $LINE >> /root/details_`date +%d%b%Y` ;sudo mount >> /root/details_`date +%d%b%Y` ; echo "history from root before activity" >> /root/details_history_`date +%d%b%Y`; sudo echo $LINE >> /root/details_history_`date +%d%b%Y`;
+
+
+2.
+sudo mysqldump mysql >/tmp/mysql_database_dump_$(date +%d%m%Y).sql ;sudo mv /tmp/mysql_database_dump_$(date +%d%m%Y).sql /opt/
+sudo mysqldump mysql user >/tmp/mysql_user_dump_$(date +%d%m%Y).sql ;sudo mv /tmp/mysql_user_dump_$(date +%d%m%Y).sql /opt/
+
+verify users list 
+sudo mysql -Bse "select user,host from mysql.user" |wc -l
+
+oop mysql
+
+3. stop mysql gracefully 
+
+DATE=`date +'%d%b%Y'`;sudo mysqladmin flush-tables && sudo mysqladmin flush-tables && sudo mysqladmin flush-tables ;sudo mysql -e "show master status\G" >> /ldaphome/$USER/${DATE}_master_status.txt;sudo mysql -e "stop slave" >> /ldaphome/$USER/${DATE}_slave_status.txt;sudo mysql -e "show slave status\G" >> /ldaphome/$USER/${DATE}_slave_status.txt && sudo service mysqld stop
+
+===========================
+
+sudo yum update kernel*
+
+After activity make ensure that before taking server into production
+verify users list 
+sudo mysql -Bse "check table mysql.user"  (must be OK)
+sudo mysql -Bse "select user,host from mysql.user" |wc -l 
+sudo mysql -Bse "show databases" (confirm all databases are present)
+
+start mysql
+
+start slave 
+

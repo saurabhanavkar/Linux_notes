@@ -27,4 +27,20 @@ for i in cat table_txt;do echo ${i};sudo mysqldump search_input ${i} | gzip -fv 
 
 for i in `cat tables.txt` ; do echo ${i} ; sudo gunzip -fv ${i}.sql.gz ; sudo mysql  dbteam_temp < ${i}.sql ; sudo gzip -fv ${i}.sql ; done
 
-################################################################################################################
+#######################################check_tbl################################################################
+
+SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'tbl_reviews_delhi';
+
+############################## Purge Command ###################################################################
+
+purge binary logs before "2025-03-07 18:00:00";
+
+############################### Tcp dump ######################################################################
+
+sudo timeout 2m tcpdump -i bond0 src 125.16.74.95 or dst 125.16.74.95 -w /tmp/192.168.13.105_tcpdumps.pcap
+
+######################### docker #########################################################################
+
+sudo docker exec -it jdleads-api /bin/bash
+cd /var/www/production/JDLeads-api/log
+

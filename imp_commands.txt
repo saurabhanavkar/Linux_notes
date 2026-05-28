@@ -4,7 +4,7 @@ for i in cat ip_list_cluster.txt; do echo $i; curl -s http://192.168.14.101:3000
 
 ############################### Kill ###########################################################################
 
-ps auxxxxx | grep 'index_omni_products_cronjob' | awk '{print $2}' | xargs kill -9
+ps auxxxxx | grep 'check_docker_container.sh' | awk '{print $2}' | xargs kill -9
 
 ###################################### MailQ####################################################################
 
@@ -27,9 +27,13 @@ for i in cat table_txt;do echo ${i};sudo mysqldump search_input ${i} | gzip -fv 
 
 for i in `cat tables.txt` ; do echo ${i} ; sudo gunzip -fv ${i}.sql.gz ; sudo mysql  dbteam_temp < ${i}.sql ; sudo gzip -fv ${i}.sql ; done
 
+for i in `cat table.txt`;do echo ${i};sudo mysqlcheck -c db_jd_deductioninfo_remotecity ${i};done
+
+ate;sudo gunzip -fv tbl_ecs_si_bill_details.sql.gz;ls -lrth;sudo mysql --socket=/var/lib/SQL/mysql_6_180/mysql.sock ashwin_processing < tbl_ecs_si_bill_details.sql;date
+
 #######################################check_tbl################################################################
 
-SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'tbl_reviews_delhi';
+SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES WHERE TABLE_NAME = 'tbl_user_historical_data';
 
 ############################## Purge Command ###################################################################
 
@@ -44,3 +48,29 @@ sudo timeout 2m tcpdump -i bond0 src 125.16.74.95 or dst 125.16.74.95 -w /tmp/19
 sudo docker exec -it jdleads-api /bin/bash
 cd /var/www/production/JDLeads-api/log
 
+###########################################################
+
+sudo ifconfig | grep -i inet
+
+###############################################################################
+sudo cat  /ldaphome/rmoolar-10130613/.bash_history
+########sed#####
+
+########################zobie################################################
+ps -A -o stat,pid,ppid | grep -e '[zZ]' | awk '{print $3}' | sudo xargs kill -9
+
+
+######################utilization####################################################
+sudo mysql -h 192.168.1.101 -u inv_app -p'INV_APP' -e "SELECT ip,cast(avg((8am_to_8pm_cpu_high_load)/cpu_core)*100 AS DECIMAL(10,2)) AS avgCpu,cast(avg((max_used_mem_mb)/total_mem_mb)*100  AS DECIMAL(10,2)) AS avgMem FROM server_utilization.tbl_srv_utilization  WHERE DATE = '2024-08-07' AND  ip ='192.168.14.156';"
+
+for i in {03..10};do echo $i; sudo mysql -h 192.168.1.101 -u inv_app -p'INV_APP' -e "SELECT ip,cast(avg((8am_to_8pm_cpu_high_load)/cpu_core)*100 AS DECIMAL(10,2)) AS avgCpu,cast(avg((max_used_mem_mb)/total_mem_mb)*100  AS DECIMAL(10,2)) AS avgMem FROM server_utilization.tbl_srv_utilization  WHERE DATE = '2024-06-${i}' AND  ip ='192.168.17.222';" ; done > 14_214_new_utilization.txt
+
+
+
+######################
+
+for i in`cat destination_ips`; do echo "=== $i ==="; ssh -o ConnectTimeout=5 web_backup@$i "cd /script && grep -Ril '192.168.12.1' ."; done
+
+###########################################################################
+
+sudo cat /var/log/nagios/nagios.log | perl -pe 's/(\d+)/localtime($1)/e' | grep -i ping | grep -i "Packet loss" | grep -v "Packet loss = 0%" | grep -v "wproc" | grep " Packet loss = 100%" | awk '{print $8}' | awk -F ";" '{print $1}'

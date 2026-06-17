@@ -15,6 +15,10 @@ ps auxxxxx | grep 'check_docker_container.sh' | awk '{print $2}' | xargs kill -9
 sudo tar -cvzf nagios_ahm.tar.gz nagios
 sudo tar -cvzf web_backup_ahm.tar.gz web_backup
 
+
+sudo tar -cvzf testss.tar.xz testss
+sudo tar -xvzf testss.tar.xz
+
 ################################### 4xx & 5xx ##################################################################
 
 response >= 500 and response <= 504
@@ -30,6 +34,9 @@ for i in `cat tables.txt` ; do echo ${i} ; sudo gunzip -fv ${i}.sql.gz ; sudo my
 for i in `cat table.txt`;do echo ${i};sudo mysqlcheck -c db_jd_deductioninfo_remotecity ${i};done
 
 ate;sudo gunzip -fv tbl_ecs_si_bill_details.sql.gz;ls -lrth;sudo mysql --socket=/var/lib/SQL/mysql_6_180/mysql.sock ashwin_processing < tbl_ecs_si_bill_details.sql;date
+
+###################################### crash tbl check ######################################################################
+sudo awk -F"'" '/Table/ {print $2}' /tmp/crashed_tables.log | sed 's|^\./||' | tr '/' ' ' | while read -r db table; do [ -z "$db" ] || [ -z "$table" ] && continue; echo "--- Checking ${db}.${table} ---"; sudo mysqlcheck  -c "$db" "$table"; done
 
 #######################################check_tbl################################################################
 
